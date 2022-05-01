@@ -1,0 +1,109 @@
+.contactsVBox {
+
+}
+
+.searchBar {
+    /*-fx-padding: 10, 10, 10, 10;*/
+    -fx-pref-height: 100px;
+    -fx-padding: 10 10 10 10;
+    -fx-background-color: #000069;
+}
+
+.conversationBar {
+    -fx-pref-height: 50px;
+    -fx-background-color: #000069;
+}
+
+.leftBox {
+    -fx-border-width: 0;
+    -fx-pref-width: 300px;
+    -fx-pref-height: 990px;
+    /*-fx-background-color: #2b5278;*/
+}
+
+.conversation {
+    /*-fx-background-color: #0e1621;*/
+    -fx-pref-width: 1620px;
+}
+
+.footer {
+    -fx-alignment: center-right;
+    /*-fx-background-color: #2b5278;*/
+}
+
+.logout {
+    -fx-pref-height: 26px;
+}
+
+.contactsList {
+    -fx-pref-width: 300px;
+    -fx-pref-height: 990px;
+    -fx-background-color: transparent;
+    /*-fx-background-color: #2b5278;*/
+}
+
+.message {
+    -fx-max-width: 200px;
+    -fx-padding: 5, 5, 5, 5;
+}
+
+.messagesVBox {
+    -fx-padding: 20, 20, 20, 20;
+    -fx-spacing: 5px;
+    -fx-background-color: #2b5278;
+    -fx-pref-height: 900px;
+    -fx-pref-width: 1620px;
+}
+
+.messagesList {
+
+    -fx-pref-height: 850px;
+    -fx-background-color: transparent;
+}
+
+.messageText {
+    -fx-text-fill: white
+}
+
+.textField {
+    -fx-pref-height: 90px;
+    -fx-pref-width: 1540px;
+    -fx-font-size: 18;
+}
+
+.sendButton {
+    -fx-pref-height: 90px;
+    -fx-pref-width: 80px;
+    -fx-font-size: 18;
+
+}
+.sendBar {
+    -fx-background-color: yellow;
+    -fx-pref-height: 90px;
+}
+
+.tile {
+    -fx-padding: 5, 5, 5, 5;
+    -fx-background-color: #000093;
+}
+.tile:pressed {
+
+    -fx-background-color: #e3e3e3;
+}
+
+.tile:hover {
+
+    -fx-background-color: gray
+}
+
+.nickname {
+    -fx-text-fill: white
+}
+
+.lastMessage {
+    -fx-text-fill: white
+}
+
+ScrollPane {
+    -fx-padding: 0;
+}

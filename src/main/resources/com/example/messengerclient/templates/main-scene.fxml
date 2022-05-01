@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox fx:id="root" styleClass="root" xmlns="http://javafx.com/javafx/16"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.example.messengerclient.controller.MainFxController"
+      stylesheets="@../css/main.css">
+
+    <HBox fx:id="main" styleClass="main">
+        <VBox fx:id="leftBox" styleClass="leftBox">
+            <VBox fx:id="searchBar" styleClass="searchBar">
+                <TextField styleClass="searchField" promptText="Search"/>
+            </VBox>
+
+                <ScrollPane fx:id="contactsList" styleClass="contactsList">
+                    <VBox fx:id="contactsVBox" styleClass="contactsVBox"/>
+                </ScrollPane>
+        </VBox>
+
+        <VBox fx:id="conversation" styleClass="conversation">
+            <HBox styleClass="conversationBar">
+                <Label fx:id="convTitle" styleClass="convTitle"/>
+            </HBox>
+            <ScrollPane fx:id="messagesList" styleClass="messagesList">
+                <VBox fx:id="messagesVBox" styleClass="messagesVBox"/>
+            </ScrollPane>
+            <HBox fx:id="sendBar" styleClass="sendBar" visible="false">
+                <TextField fx:id="textField" styleClass="textField" promptText="Write Your Message" />
+                <Button fx:id="sendButton" styleClass="sendButton" onMouseClicked="#sendMessage" text=">"/>
+            </HBox>
+        </VBox>
+    </HBox>
+
+    <HBox fx:id="footer" styleClass="footer">
+        <Button fx:id="logout" styleClass="logout" text="logout" onMouseClicked="#logout"/>
+    </HBox>
+
+</VBox>

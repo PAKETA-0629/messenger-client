@@ -1,0 +1,41 @@
+
+.loginTextField {
+    /*-fx-pref-width: 200;*/
+}
+
+.fields {
+    -fx-alignment: center;
+    -fx-spacing: 10px;
+}
+
+
+.loginButtonVBox {
+    -fx-alignment: top-center;
+}
+
+#loginButton {
+
+    -fx-min-width: 350px;
+    -fx-min-height: 40px;
+}
+
+#loginButton:hover {
+    -fx-background-color:#dae7f3;
+}
+
+#tile {
+    -fx-border-color: yellow;
+}
+
+
+TextField {
+    -fx-max-width: 350;
+    -fx-font-size: 18;
+}
+
+
+PasswordField {
+
+    -fx-max-width: 350;
+    -fx-font-size: 18;
+}
