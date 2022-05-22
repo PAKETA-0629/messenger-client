@@ -46,6 +46,11 @@ public class DataResolver {
     }
 
 
+    public void deleteMessage(Message message) {
+        mainFxController.deleteMessage(message);
+    }
+
+
     public void successLogin() {
        loginFxController.successLogin();
     }

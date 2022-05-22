@@ -26,7 +26,7 @@ public class Message {
 
     @Override
     public boolean equals(Object object) {
-        if (!(object instanceof Message)){
+        if (!(object instanceof Message)) {
             return false;
         }
 
@@ -35,6 +35,6 @@ public class Message {
                 this.sender.equals(message.getSender()) &&
                 this.messageType.equals(message.getMessageType()) &&
                 this.text.equals(message.getText()) &&
-                this.createAt.equals(message.getCreateAt());
+                this.createAt.getTime() == message.getCreateAt().getTime();
     }
 }

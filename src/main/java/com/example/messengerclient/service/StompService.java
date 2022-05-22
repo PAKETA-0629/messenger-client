@@ -1,5 +1,6 @@
 package com.example.messengerclient.service;
 
+import com.example.messengerclient.model.Message;
 import com.example.messengerclient.websocket.MyStompSessionHandler;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -59,6 +60,15 @@ public class StompService extends StompSessionHandlerAdapter {
     public void sendMessage(String endpoint, Object payload) {
 
         session.send(endpoint, payload);
+    }
+
+    public void changeStatus(Message message) {
+        session.send("/app/message/change-status", message);
+    }
+
+
+    public void deleteMessage(Message message) {
+        session.send("/app/message/delete", message);
     }
 
 

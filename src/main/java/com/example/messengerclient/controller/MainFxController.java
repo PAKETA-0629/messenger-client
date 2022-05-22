@@ -12,6 +12,7 @@ import com.example.messengerclient.util.Role;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.input.ContextMenuEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
@@ -22,11 +23,9 @@ import net.rgielen.fxweaver.core.FxmlView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.sql.Date;
 import java.sql.Timestamp;
-import java.util.Arrays;
-import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Component
@@ -58,6 +57,7 @@ public class MainFxController {
     private Label convTitle;
     @FXML
     private HBox sendBar;
+
 
 
     private User user;
@@ -104,7 +104,9 @@ public class MainFxController {
         conversations.get(currentConversation).getMessages().add(message);
         displayMessages(List.of(message));
         contactsVBox.getChildren().clear();
+        Conversation conversation = conversations.get(this.currentConversation);
         sortConversations();
+        this.currentConversation = conversations.indexOf(conversation);
         displayConversations(conversations);
         textField.setText("");
 
@@ -139,6 +141,17 @@ public class MainFxController {
     }
 
 
+    public void deleteMessage(Message message) {
+        Conversation conversation = conversations.stream().filter(conv -> conv.getId() == message.getConversation()).findFirst().get();
+        conversation.getMessages().remove(message);
+        if (conversations.get(this.currentConversation).equals(conversation)) {
+            messagesVBox.getChildren().clear();
+            displayMessages(conversation.getMessages());
+        }
+        contactsVBox.getChildren().clear();
+        displayConversations(this.conversations);
+    }
+
     @SneakyThrows
     public void receiveMessage(Message message) {
 
@@ -150,7 +163,7 @@ public class MainFxController {
         if (messageIndex == -1) {
             conversation.getMessages().add(message);
             conversation.setUnread(true);
-            if (currentConversation == conversations.indexOf(conversation)) {
+            if (this.currentConversation == conversations.indexOf(conversation)) {
                 displayMessages(List.of(message));
             }  else {
                 contactsVBox.getChildren().get(conversations.indexOf(conversation)).setStyle("-fx-background-color: green");
@@ -162,25 +175,35 @@ public class MainFxController {
                 displayMessages(conversation.getMessages());
             }
         }
+
+        conversation = conversations.get(this.currentConversation);
+        sortConversations();
+        this.currentConversation = conversations.indexOf(conversation);
         contactsVBox.getChildren().clear();
         displayConversations(conversations);
     }
 
 
-    //todo not working
     public void sortConversations() {
 
-        conversations.sort((o1, o2) -> {
-            if (o1.getMessages().size() == 0 & o1.getMessages().size() == 0) return 0;
-            else if (o1.getMessages().size() == 0 & o2.getMessages().size() > 0) return -1;
-            else if (o1.getMessages().size() > 0 & o2.getMessages().size() == 0) return 1;
+        this.conversations = this.conversations.stream().sorted((o1, o2) -> {
+
+            if (o1.getMessages().size() == 0 & o1.getMessages().size() == 0) {
+                return 0;
+            }
+            else if (o1.getMessages().size() == 0 & o2.getMessages().size() > 0) {
+                return 1;
+            }
+            else if (o1.getMessages().size() > 0 & o2.getMessages().size() == 0) {
+                return -1;
+            }
             Timestamp date1 = o1.getMessages().get(o1.getMessages().size() - 1).getCreateAt();
             Timestamp date2 = o2.getMessages().get(o2.getMessages().size() - 1).getCreateAt();
-            if (date1.after(date2)) return 1;
-            else if (date1.before(date2)) return -1;
+            if (date1.after(date2)) return -1;
+            else if (date1.before(date2)) return 1;
             else if (date1.equals(date2)) return 0;
             return 0;
-        });
+        }).collect(Collectors.toList());
     }
 
     public void displayConversations(List<Conversation> conversations) {
@@ -210,7 +233,7 @@ public class MainFxController {
             Message message = !conversation.getMessages().isEmpty() ? conversation.getMessages().get(conversation.getMessages().size() - 1) : null;
             lastMessage.setText(message != null ? message.getText() : "");
             time.setText(message != null ? message.getCreateAt().toString() : "");
-            if (conversation.isUnread()) flowPane.setStyle("-fx-background-color: green");
+            if (this.currentConversation != conversations.indexOf(conversation) && conversation.isUnread()) flowPane.setStyle("-fx-background-color: green");
             flowPane.getChildren().addAll(nickname, lastMessage, time, newMessage);
             flowPane.setOnMouseClicked(getMouseEvent(flowPane));
             contactsVBox.getChildren().add(flowPane);
@@ -232,17 +255,38 @@ public class MainFxController {
             flowPane.setHgap(20.0D);
             time.setText(message.getCreateAt().toString());
             label.setText(message.getText());
+            ContextMenu contextMenu = new ContextMenu();
+            MenuItem menuItem1 = new MenuItem("Edit");
+            MenuItem menuItem2 = new MenuItem("Delete");
+            contextMenu.getItems().addAll(menuItem1,menuItem2);
+            menuItem1.setOnAction(event -> {
+
+            });
+
+            menuItem2.setOnAction(event -> {
+                conversations.get(currentConversation).getMessages().remove(message);
+                messagesVBox.getChildren().clear();
+                messagesList.setContent(messagesVBox);
+                displayMessages(conversations.get(currentConversation).getMessages());
+                stompService.deleteMessage(message);
+            });
 
             flowPane.getChildren().addAll(label);
-
+            flowPane.setOnContextMenuRequested(event -> contextMenu.show(flowPane, event.getScreenX(), event.getScreenY()));
             if (message.getSender() == null || message.getSender().getUser().getNickname().equals(user.getNickname())) {
                 flowPane.setStyle("-fx-background-color: blue");
                 Label status = new Label();
                 status.setText(message.getMessageStatus().toString());
                 flowPane.getChildren().add(status);
             } else {
+
+                if (message.getMessageStatus() != MessageStatus.READ) {
+                    message.setMessageStatus(MessageStatus.READ);
+                    stompService.changeStatus(message);
+                }
                 flowPane.setStyle("-fx-background-color: gray");
             }
+
 
             messagesVBox.getChildren().add(flowPane);
         }

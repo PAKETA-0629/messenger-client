@@ -3,11 +3,11 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
+<?import com.sun.javafx.scene.control.ContextMenuContent.MenuBox?>
 <VBox fx:id="root" styleClass="root" xmlns="http://javafx.com/javafx/16"
       xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="com.example.messengerclient.controller.MainFxController"
       stylesheets="@../css/main.css">
-
     <HBox fx:id="main" styleClass="main">
         <VBox fx:id="leftBox" styleClass="leftBox">
             <VBox fx:id="searchBar" styleClass="searchBar">

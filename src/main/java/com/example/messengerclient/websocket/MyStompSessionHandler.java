@@ -99,9 +99,15 @@ public class MyStompSessionHandler extends StompSessionHandlerAdapter {
                 dataResolver.handleConversation(list);
             });
         } else if (payload instanceof Message) {
-            Platform.runLater(() -> {
-                dataResolver.handleMessage((Message) payload);
-            });
+            if (Objects.equals(headers.getFirst("destiny"), "delete")) {
+                Platform.runLater(() -> {
+                    dataResolver.deleteMessage((Message) payload);
+                });
+            } else {
+                Platform.runLater(() -> {
+                    dataResolver.handleMessage((Message) payload);
+                });
+            }
         }
     }
 
